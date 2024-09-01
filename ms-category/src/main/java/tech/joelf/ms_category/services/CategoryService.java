@@ -1,5 +1,8 @@
 package tech.joelf.ms_category.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -48,6 +51,12 @@ public class CategoryService {
     public CategoryResponse findById(Long id) {
         Category product = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
         return modelMapper.map(product, CategoryResponse.class);
+    }
+
+    public List<CategoryResponse> findCategoriesByProduct(Long productId) {
+        List<Category> categories = categoryRepository.findCategoriesByProduct(productId);
+        return categories.stream().map(category -> modelMapper.map(category, CategoryResponse.class))
+                .collect(Collectors.toList());
     }
 
     public void delete(Long id) {

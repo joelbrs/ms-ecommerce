@@ -1,5 +1,7 @@
 package tech.joelf.ms_category.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -43,6 +45,12 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.findById(id));
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<List<CategoryResponse>> findCategoriesByProduct(
+            @PathVariable Long productId) {
+        return ResponseEntity.ok(categoryService.findCategoriesByProduct(productId));
     }
 
     @DeleteMapping("/{id}")
