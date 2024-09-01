@@ -1,9 +1,16 @@
 package tech.joelf.ms_product.dtos.request;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class UpdateProductRequest {
+    @NotBlank
     private String name;
     private String description;
+
+    @NotNull
     private Double price;
+    @NotBlank
     private String imgUrl;
 
     public UpdateProductRequest() {

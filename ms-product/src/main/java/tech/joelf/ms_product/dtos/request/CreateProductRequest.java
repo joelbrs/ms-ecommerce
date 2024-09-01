@@ -2,10 +2,19 @@ package tech.joelf.ms_product.dtos.request;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class CreateProductRequest {
+    @NotBlank
     private String name;
+
     private String description;
+
+    @NotNull
     private BigDecimal price;
+
+    @NotBlank
     private String imgUrl;
 
     public CreateProductRequest() {
