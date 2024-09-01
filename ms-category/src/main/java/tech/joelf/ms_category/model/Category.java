@@ -1,7 +1,5 @@
 package tech.joelf.ms_category.model;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +14,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Long productId;
 
     public Category() {
     }
@@ -34,6 +33,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getProductId() {
+        return this.productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     @Override
