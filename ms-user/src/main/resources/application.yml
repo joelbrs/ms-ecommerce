@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ms-server
+    name: ms-user
   profiles:
     active: dev
 
