@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import tech.joelf.ms_product.dtos.request.CreateProductRequest;
 import tech.joelf.ms_product.dtos.request.UpdateProductRequest;
-import tech.joelf.ms_product.dtos.response.ProductResponse;
+import tech.joelf.ms_product.dtos.response.ProductDetailResponse;
+import tech.joelf.ms_product.dtos.response.ProductPagedResponse;
 import tech.joelf.ms_product.services.ProductService;
 
 @RestController
@@ -24,24 +25,24 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(@RequestBody @Valid CreateProductRequest request) {
+    public ResponseEntity<ProductDetailResponse> create(@RequestBody @Valid CreateProductRequest request) {
         return ResponseEntity.ok(productService.create(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> update(@PathVariable Long id,
+    public ResponseEntity<ProductDetailResponse> update(@PathVariable Long id,
             @RequestBody @Valid UpdateProductRequest request) {
         return ResponseEntity.ok(productService.update(id, request));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponse>> findProducts(Pageable pageable,
+    public ResponseEntity<Page<ProductPagedResponse>> findProducts(Pageable pageable,
             @RequestParam(required = false) String name) {
         return ResponseEntity.ok(productService.findProducts(pageable, name));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<ProductDetailResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findById(id));
     }
 
