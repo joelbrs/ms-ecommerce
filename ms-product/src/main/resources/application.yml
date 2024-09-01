@@ -1,6 +1,8 @@
 spring:
   application:
     name: ms-product
+  profiles:
+    active: dev
 
 server:
   port: 0
