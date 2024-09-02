@@ -4,6 +4,7 @@ spring:
     username: ms-product
     password: ms-product
     driver-class-name: org.postgresql.Driver
+
   jpa:
     show-sql: true
     properties:
@@ -11,3 +12,13 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+
+  rabbitmq:
+    host: localhost
+    port: 5671
+    username: guest
+    password: guest
+    template:
+      retry:
+        enabled: true
+        initial-interval: 2s
