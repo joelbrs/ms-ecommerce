@@ -3,18 +3,11 @@ spring:
     name: ms-relations
   profiles:
     active: dev
-  rabbitmq:
-    host: localhost
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PASSWORD}
-    template:
-      retry:
-        enabled: true
-        initial-interval: 2s
 
 server:
   port: 0
+  servlet:
+    contextPath: /relations
 
 eureka:
   client:
@@ -22,6 +15,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    preferIpAddress: true
 
 amqp:
   exchange:
