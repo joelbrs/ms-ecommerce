@@ -14,12 +14,12 @@ public class AMQPConfig {
     private String queueProductCategory;
 
     @Bean
-    private Queue queueProductCategory() {
+    public Queue queueProductCategory() {
         return new Queue(queueProductCategory, Boolean.TRUE);
     }
 
     @Bean
-    private RabbitTemplate productCategoryRabbitTemplate(ConnectionFactory connectionFactory) {
+    public RabbitTemplate productCategoryRabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setRoutingKey(queueProductCategory);
         return rabbitTemplate;
