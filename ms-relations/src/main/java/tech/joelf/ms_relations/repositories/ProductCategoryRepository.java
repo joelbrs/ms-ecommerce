@@ -16,4 +16,7 @@ public interface ProductCategoryRepository extends JpaRepository<ProductCategory
 
     @Query("SELECT p FROM ProductCategory p WHERE p.productId = :productId")
     List<ProductCategory> findByProductId(Long productId);
+
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN TRUE ELSE FALSE END FROM ProductCategory p WHERE p.categoryId = :categoryId AND p.productId = :productId")
+    Boolean existsByCategoryIdAndProductId(Long categoryId, Long productId);
 }

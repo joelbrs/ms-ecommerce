@@ -32,6 +32,8 @@ public class ProductCategoryService {
 
     @Transactional
     public ProductCategoryDetailResponse create(CreateProductCategoryRequest request) {
+        validateRelation(request.getCategoryId(), request.getProductId());
+
         ProductCategory productCategory = productCategoryRepository
                 .save(modelMapper.map(request, ProductCategory.class));
 
@@ -42,7 +44,10 @@ public class ProductCategoryService {
     @Transactional
     public void associateProductsToCategory(AssociateProductsToCategoryRequest request) {
         List<ProductCategory> productCategories = request.getProducts().stream()
-                .map(productId -> new ProductCategory(productId, request.getCategoryId()))
+                .map(productId -> {
+                    validateRelation(request.getCategoryId(), productId);
+                    return new ProductCategory(productId, request.getCategoryId());
+                })
                 .collect(Collectors.toList());
         productCategoryRepository.saveAll(productCategories);
         productCategoryPublisher.sendCreateRelation(productCategories);
@@ -51,7 +56,10 @@ public class ProductCategoryService {
     @Transactional
     public void associateCategoriesToProduct(AssociateCategoriesToProductRequest request) {
         List<ProductCategory> productCategories = request.getCategories().stream()
-                .map(categoryId -> new ProductCategory(request.getProductId(), categoryId))
+                .map(categoryId -> {
+                    validateRelation(categoryId, request.getProductId());
+                    return new ProductCategory(request.getProductId(), categoryId);
+                })
                 .collect(Collectors.toList());
         productCategoryRepository.saveAll(productCategories);
         productCategoryPublisher.sendCreateRelation(productCategories);
@@ -69,5 +77,17 @@ public class ProductCategoryService {
         return productCategories.stream()
                 .map(productCategory -> modelMapper.map(productCategory, ProductCategoryDetailResponse.class))
                 .collect(Collectors.toList());
+    }
+
+    private void validateRelation(Long categoryId, Long productId) {
+        var exists = existsByCategoryIdAndProductId(categoryId, productId);
+
+        if (!exists) {
+            throw new IllegalArgumentException("Relation already exists");
+        }
+    }
+
+    public Boolean existsByCategoryIdAndProductId(Long categoryId, Long productId) {
+        return productCategoryRepository.existsByCategoryIdAndProductId(categoryId, productId);
     }
 }
