@@ -4,7 +4,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import tech.joelf.ms_product.dtos.request.CreateProductRequest;
+import tech.joelf.ms_product.dtos.events.CreateProductEvent;
 import tech.joelf.ms_product.utils.ConvertDataToJSON;
 
 @Component
@@ -17,7 +17,7 @@ public class ProductPublisher {
         this.queueProducts = queueProducts;
     }
 
-    public void publish(CreateProductRequest createProductRequest) {
-        productsRabbitTemplate.convertAndSend(queueProducts.getName(), ConvertDataToJSON.convert(createProductRequest));
+    public void publish(CreateProductEvent createProductEvent) {
+        productsRabbitTemplate.convertAndSend(queueProducts.getName(), ConvertDataToJSON.convert(createProductEvent));
     }
 }
