@@ -24,8 +24,10 @@ public class CloudGatewayApplication {
 						.uri("lb://ms-user"))
 				.route(r -> r.path("/products/**")
 						.uri("lb://ms-product"))
-				.route(r -> r.path("/categories")
+				.route(r -> r.path("/categories/**")
 						.uri("lb://ms-category"))
+				.route(r -> r.path("/relations/**")
+						.uri("lb://ms-relations/relations"))
 				.build();
 	}
 }

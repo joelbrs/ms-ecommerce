@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  database:
+    container_name: ms-relations-database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  rabbitmq:
+    container_name: relations-rabbitmq
+    image: 'rabbitmq:3.13-management'
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}'
+      - 'RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}'
+    ports:
+      - '${RABBITMQ_PORT}:5672'
+      - '15672:15672'
