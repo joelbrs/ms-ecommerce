@@ -3,7 +3,7 @@ package tech.joelf.ms_relations.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_category")
+@Table(name = "tb_product_category")
 public class ProductCategory {
 
     @Id
