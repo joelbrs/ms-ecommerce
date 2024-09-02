@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AMQPConfig {
 
-    @Value("${amqp.exchange.relations.name}")
-    private String queueRelationsName;
+    @Value("${amqp.exchange.relations.product-category.name}")
+    private String queueProductCategory;
 
     @Bean
     private Queue queueRelations() {
-        return new Queue(queueRelationsName, Boolean.TRUE);
+        return new Queue(queueProductCategory, Boolean.TRUE);
     }
 }

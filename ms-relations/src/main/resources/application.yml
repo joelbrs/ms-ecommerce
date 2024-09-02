@@ -22,4 +22,5 @@ eureka:
 amqp:
   exchange:
     relations:
-      name: relations-queue
+      product-category:
+        name: product-category
