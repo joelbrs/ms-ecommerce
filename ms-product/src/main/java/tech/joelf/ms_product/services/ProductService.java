@@ -15,6 +15,7 @@ import tech.joelf.ms_product.dtos.request.UpdateProductRequest;
 import tech.joelf.ms_product.dtos.response.ProductDetailResponse;
 import tech.joelf.ms_product.dtos.response.ProductPagedResponse;
 import tech.joelf.ms_product.model.Product;
+import tech.joelf.ms_product.queues.ProductPublisher;
 import tech.joelf.ms_product.repositories.ProductRepository;
 import tech.joelf.ms_product.resources.CategoryResource;
 
@@ -24,14 +25,14 @@ public class ProductService {
     private final ModelMapper modelMapper;
     private final CategoryResource categoryResource;
     private final ProductRepository productRepository;
-    private final RabbitTemplate productsRabbitTemplate;
+    private final ProductPublisher productPublisher;
 
     public ProductService(ProductRepository productRepository, ModelMapper modelMapper,
-            CategoryResource categoryResource, RabbitTemplate productsRabbitTemplate) {
+            CategoryResource categoryResource, ProductPublisher productPublisher) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
         this.categoryResource = categoryResource;
-        this.productsRabbitTemplate = productsRabbitTemplate;
+        this.productPublisher = productPublisher;
     }
 
     @Transactional
@@ -42,7 +43,7 @@ public class ProductService {
             }
 
             Product product = productRepository.save(modelMapper.map(request, Product.class));
-            productsRabbitTemplate.convertAndSend(request);
+            productPublisher.publish(request);
             return modelMapper.map(product, ProductDetailResponse.class);
         } catch (Exception e) {
             throw new RuntimeException();
