@@ -13,4 +13,7 @@ public interface CategoryResource {
 
     @GetMapping("/product/{productId}")
     public List<CategoryResponse> findCategoriesByProduct(@PathVariable Long productId);
+
+    @GetMapping("/{id}")
+    public CategoryResponse findById(@PathVariable Long id);
 }

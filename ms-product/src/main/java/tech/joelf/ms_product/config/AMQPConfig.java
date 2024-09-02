@@ -13,9 +13,17 @@ public class AMQPConfig {
     @Value("${amqp.exchange.relations.product-category.name}")
     private String queueProductCategory;
 
+    @Value("${amqp.exchange.relations.products.name}")
+    private String queueProducts;
+
     @Bean
     public Queue queueProductCategory() {
         return new Queue(queueProductCategory, Boolean.TRUE);
+    }
+
+    @Bean
+    Queue queueProducts() {
+        return new Queue(queueProducts, Boolean.TRUE);
     }
 
     @Bean
@@ -24,4 +32,12 @@ public class AMQPConfig {
         rabbitTemplate.setRoutingKey(queueProductCategory);
         return rabbitTemplate;
     }
+
+    @Bean
+    public RabbitTemplate productsRabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setRoutingKey(queueProducts);
+        return rabbitTemplate;
+    }
+
 }

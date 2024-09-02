@@ -20,3 +20,5 @@ amqp:
     relations:
       product-category:
         name: product-category
+      products:
+        name: products

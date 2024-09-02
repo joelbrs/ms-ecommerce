@@ -3,6 +3,7 @@ package tech.joelf.ms_product.services;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -23,18 +24,29 @@ public class ProductService {
     private final ModelMapper modelMapper;
     private final CategoryResource categoryResource;
     private final ProductRepository productRepository;
+    private final RabbitTemplate productsRabbitTemplate;
 
     public ProductService(ProductRepository productRepository, ModelMapper modelMapper,
-            CategoryResource categoryResource) {
+            CategoryResource categoryResource, RabbitTemplate productsRabbitTemplate) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
         this.categoryResource = categoryResource;
+        this.productsRabbitTemplate = productsRabbitTemplate;
     }
 
     @Transactional
     public ProductDetailResponse create(CreateProductRequest request) {
-        Product product = productRepository.save(modelMapper.map(request, Product.class));
-        return modelMapper.map(product, ProductDetailResponse.class);
+        try {
+            for (Long categoryId : request.getCategories()) {
+                categoryResource.findById(categoryId);
+            }
+
+            Product product = productRepository.save(modelMapper.map(request, Product.class));
+            productsRabbitTemplate.convertAndSend(request);
+            return modelMapper.map(product, ProductDetailResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     @Transactional
