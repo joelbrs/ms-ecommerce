@@ -3,6 +3,7 @@ package tech.joelf.ms_product.services;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import tech.joelf.ms_product.dtos.request.UpdateProductRequest;
 import tech.joelf.ms_product.dtos.response.ProductDetailResponse;
 import tech.joelf.ms_product.dtos.response.ProductPagedResponse;
 import tech.joelf.ms_product.model.Product;
+import tech.joelf.ms_product.queues.ProductPublisher;
 import tech.joelf.ms_product.repositories.ProductRepository;
 import tech.joelf.ms_product.resources.CategoryResource;
 
@@ -23,18 +25,29 @@ public class ProductService {
     private final ModelMapper modelMapper;
     private final CategoryResource categoryResource;
     private final ProductRepository productRepository;
+    private final ProductPublisher productPublisher;
 
     public ProductService(ProductRepository productRepository, ModelMapper modelMapper,
-            CategoryResource categoryResource) {
+            CategoryResource categoryResource, ProductPublisher productPublisher) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
         this.categoryResource = categoryResource;
+        this.productPublisher = productPublisher;
     }
 
     @Transactional
     public ProductDetailResponse create(CreateProductRequest request) {
-        Product product = productRepository.save(modelMapper.map(request, Product.class));
-        return modelMapper.map(product, ProductDetailResponse.class);
+        try {
+            for (Long categoryId : request.getCategories()) {
+                categoryResource.findById(categoryId);
+            }
+
+            Product product = productRepository.save(modelMapper.map(request, Product.class));
+            productPublisher.publish(request);
+            return modelMapper.map(product, ProductDetailResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     @Transactional
