@@ -1,13 +1,18 @@
 package tech.joelf.ms_product.dtos.response;
 
-public class ProductResponse {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ProductDetailResponse {
     private Long id;
     private String name;
     private String description;
     private String imgUrl;
     private Double price;
+    private List<CategoryResponse> categories = new ArrayList<>();
 
-    public ProductResponse() {
+    public ProductDetailResponse() {
     }
 
     public Long getId() {
@@ -48,5 +53,13 @@ public class ProductResponse {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public List<CategoryResponse> getCategories() {
+        return Collections.unmodifiableList(categories);
+    }
+
+    public void setCategories(List<CategoryResponse> categories) {
+        this.categories = categories;
     }
 }
