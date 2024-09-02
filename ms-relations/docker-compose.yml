@@ -15,3 +15,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  rabbitmq:
+    container_name: relations-rabbitmq
+    image: 'rabbitmq:latest'
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}'
+      - 'RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}'
+    ports:
+      - '${RABBITMQ_PORT}:5672'
