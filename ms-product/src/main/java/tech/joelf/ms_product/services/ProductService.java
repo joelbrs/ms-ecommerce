@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import tech.joelf.ms_product.dtos.events.CreateProductEvent;
 import tech.joelf.ms_product.dtos.request.CreateProductRequest;
 import tech.joelf.ms_product.dtos.request.UpdateProductRequest;
 import tech.joelf.ms_product.dtos.response.ProductDetailResponse;
@@ -43,7 +44,7 @@ public class ProductService {
             }
 
             Product product = productRepository.save(modelMapper.map(request, Product.class));
-            productPublisher.publish(request);
+            productPublisher.publish(new CreateProductEvent(product.getId(), request.getCategories()));
             return modelMapper.map(product, ProductDetailResponse.class);
         } catch (Exception e) {
             throw new RuntimeException();
