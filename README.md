@@ -4,8 +4,12 @@ Este projeto é uma aplicação de e-commerce composta por vários microsserviç
 
 ## Estrutura do Projeto
 
-- **ms-relations**: Gerencia as relações entre produtos e categorias.
+- **ms-user**: Gerencia os usuários do sistema.
+- **ms-category**: Gerencia as categorias de produtos.
 - **ms-product**: Gerencia os produtos.
+- **ms-relations**: Gerencia as relações entre entidades.
+- **ms-order**: Gerencia os pedidos dos clientes.
+- **ms-payment**: : Gerencia os pagamentos dos pedidos.
 - **cloud-gateway**: Gateway API que roteia as solicitações para os microsserviços apropriados.
 - **eureka-server**: Serviço de descoberta para registrar e localizar microsserviços.
 
@@ -16,6 +20,10 @@ Este projeto é uma aplicação de e-commerce composta por vários microsserviç
 - **RabbitMQ**: Sistema de mensageria para comunicação assíncrona entre microsserviços.
 - **PostgreSQL**: Banco de dados relacional para armazenar dados.
 - **Docker**: Para containerização dos microsserviços.
+
+## Diagrama C4
+
+![Diagrama C4](c4.png)
 
 ## Configuração e Execução
 

@@ -1,0 +1,43 @@
+@startuml
+!define RECTANGLE component
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Contêineres
+
+Person(user, "User", "Usuário do sistema")
+
+System_Boundary(c1, "E-commerce System") {
+    Container(cloudGateway, "Cloud Gateway", "Spring Boot", "Roteia solicitações para microsserviços", $tags="container")
+    Container(eurekaServer, "Eureka Server", "Spring Boot", "Serviço de descoberta de serviços", $tags="container")
+    Container(msUser, "ms-user", "Spring Boot", "Gerencia usuários", $tags="container")
+    Container(msCategory, "ms-category", "Spring Boot", "Gerencia categorias", $tags="container")
+    Container(msRelations, "ms-relations", "Spring Boot", "Gerencia relações entre produtos e categorias", $tags="container")
+    Container(msProduct, "ms-product", "Spring Boot", "Gerencia produtos", $tags="container")
+    Container(msOrder, "ms-order", "Spring Boot", "Gerencia pedidos", $tags="container")
+    Container(msPayment, "ms-payment", "Spring Boot", "Gerencia pagamentos", $tags="container")
+    ContainerDb(msRelationsDB, "PostgreSQL (ms-relations-db)", "PostgreSQL", "Banco de dados para ms-relations", $tags="container")
+    ContainerDb(msProductDB, "PostgreSQL (ms-product-db)", "PostgreSQL", "Banco de dados para ms-product", $tags="container")
+    ContainerDb(msOrderDB, "PostgreSQL (ms-order-db)", "PostgreSQL", "Banco de dados para ms-order", $tags="container")
+    ContainerDb(msPaymentDB, "PostgreSQL (ms-payment-db)", "PostgreSQL", "Banco de dados para ms-payment", $tags="container")
+}
+
+Rel(user, cloudGateway, "Usa")
+Rel(cloudGateway, msUser, "Roteia para")
+Rel(cloudGateway, msCategory, "Roteia para")
+Rel(cloudGateway, msRelations, "Roteia para")
+Rel(cloudGateway, msProduct, "Roteia para")
+Rel(cloudGateway, msOrder, "Roteia para")
+Rel(cloudGateway, msPayment, "Roteia para")
+Rel(msRelations, msRelationsDB, "Lê/Escreve")
+Rel(msProduct, msProductDB, "Lê/Escreve")
+Rel(msOrder, msOrderDB, "Lê/Escreve")
+Rel(msPayment, msPaymentDB, "Lê/Escreve")
+Rel(cloudGateway, eurekaServer, "Registra/Descobre")
+Rel(msUser, eurekaServer, "Registra/Descobre")
+Rel(msCategory, eurekaServer, "Registra/Descobre")
+Rel(msRelations, eurekaServer, "Registra/Descobre")
+Rel(msProduct, eurekaServer, "Registra/Descobre")
+Rel(msOrder, eurekaServer, "Registra/Descobre")
+Rel(msPayment, eurekaServer, "Registra/Descobre")
+
+@enduml
